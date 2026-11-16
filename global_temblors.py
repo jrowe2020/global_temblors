@@ -5,7 +5,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 # Toggle to True to test the warning banner even when no tsunami == 1 exists in the data
-test = False
+TEST_MODE = False
 
 # 1. Fetch live daily earthquake data from the USGS API.
 url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
@@ -18,7 +18,8 @@ title = all_eq_data['metadata']['title']
 all_eq_dicts = all_eq_data['features']
 
 # --- ADD FAKE EARTHQUAKE FOR TESTING ---
-fake_eq = {
+if TEST_MODE:
+    fake_eq = {
     'properties': {
         'mag': 7.8,
         'title': 'M 7.8 - 120 km W of Portland, Oregon (TEST)',
@@ -29,8 +30,10 @@ fake_eq = {
     'geometry': {
         'coordinates': [-124.5, 45.5, 10.0]  # [lon, lat, depth]
     }
-}
-all_eq_dicts.append(fake_eq)
+    }
+    all_eq_dicts.append(fake_eq)
+
+
 # ---------------------------------------
 
 la_tz = ZoneInfo("America/Los_Angeles")
@@ -72,7 +75,7 @@ for eq_dict in all_eq_dicts:
         marker_colors.append(mag)    # Standard magnitude-based value
 
 # Determine if the warning banner should be displayed
-has_tsunami = (1 in tsunamis) or test
+has_tsunami = (1 in tsunamis) 
 
 # 4. Build and display the interactive map.
 fig = px.scatter_map(
