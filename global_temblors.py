@@ -4,6 +4,9 @@ import plotly.express as px
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+# Toggle to True to test the warning banner even when no tsunami == 1 exists in the data
+TEST_TSUNAMI_WARNING = True
+
 # 1. Fetch live daily earthquake data from the USGS API.
 url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
 response = requests.get(url)
@@ -39,9 +42,13 @@ for eq_dict in all_eq_dicts:
         eq_titles.append(eq_title)
         tsunamis.append("Yes" if tsunami == 1 else "No")
 
+
         # Convert Unix timestamp (milliseconds) to Los Angeles time
         dt_la = datetime.fromtimestamp(timestamp_ms / 1000, tz=la_tz)
         eq_times.append(dt_la.strftime("%b %d, %Y %I:%M:%S %p %Z"))
+
+# Determine if the warning banner should be displayed
+has_tsunami = (1 in tsunamis) or TEST_TSUNAMI_WARNING
 
 # 4. Build and display the interactive map.
 fig = px.scatter_map(
@@ -71,6 +78,27 @@ fig.update_traces(
         "<extra></extra>"
     )
 )
+
+# Add a prominent warning banner if a tsunami event is detected or test mode is active
+if has_tsunami:
+    banner_text = "⚠️ TSUNAMI WARNING: One or more earthquakes triggered a tsunami alert."
+    if TEST_TSUNAMI_WARNING and (1 not in tsunamis):
+        banner_text += " [TEST MODE]"
+
+    fig.add_annotation(
+        text=banner_text,
+        xref="paper",
+        yref="paper",
+        x=0.5,
+        y=1.06,
+        showarrow=False,
+        font=dict(size=14, color="white", family="Arial Black"),
+        bgcolor="crimson",
+        bordercolor="darkred",
+        borderwidth=2,
+        borderpad=8,
+    )
+
 
 fig.show()
 
