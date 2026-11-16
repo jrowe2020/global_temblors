@@ -5,7 +5,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 # 1. Fetch live daily earthquake data from the USGS API.
-url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson"
+url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
 response = requests.get(url)
 response.raise_for_status()  # Verify the request succeeded
 all_eq_data = response.json()
@@ -32,7 +32,7 @@ for eq_dict in all_eq_dicts:
         # 3. Skip entries with missing or negative magnitudes to prevent Plotly errors.
     if mag is not None and mag > 0:
         mags.append(mag)
-        sizes.append(mag ** 10)
+        sizes.append(mag ** 5)
         lons.append(lon)
         lats.append(lat)
         depths.append(round(depth, 1))
