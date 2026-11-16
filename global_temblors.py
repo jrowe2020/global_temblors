@@ -66,7 +66,7 @@ for eq_dict in all_eq_dicts:
         # Highlight tsunami earthquakes and record their details
     if tsunami == 1:
         marker_colors.append('red')  # Distinct highlight color
-        warning_text = f"{eq_title} <br>(Lat: {lat}, Lon: {lon})"
+        warning_text = f"{eq_title} <br>(Mag: {mag}, Lat: {lat}, Lon: {lon})"
         tsunami_warnings.append(warning_text)
     else:
         marker_colors.append(mag)    # Standard magnitude-based value
