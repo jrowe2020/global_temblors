@@ -148,6 +148,31 @@ fig.add_annotation(
     borderpad=8
 )
 
+# 7. Add Attribution & Credits Text Box in the bottom-left corner
+attribution_text = (
+    "<b>Project Credits & Data Sources:</b><br>"
+    "• Base code adapted from the <i>Python Crash Course</i> earthquake visualization exercise.<br>"
+    "• Seismic event data provided by the U.S. Geological Survey (USGS).<br>"
+    "• Enhanced features, research, and error handling developed with assistance from Google."
+)
+
+fig.add_annotation(
+    text=attribution_text,
+    xref="paper", yref="paper",
+    x=0.0, y=-0.02,
+    xanchor="left",
+    yanchor="top",
+    showarrow=False,
+    align="left",
+    font=dict(size=11, color="#333333"),
+    bgcolor="rgba(245, 247, 250, 0.9)",
+    bordercolor="#cccccc",
+    borderwidth=1,
+    borderpad=8
+)
+
+# Ensure enough bottom and top margin so neither box gets cut off
+fig.update_layout(margin=dict(t=100, b=100))
 
 fig.show()
 
