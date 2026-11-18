@@ -120,7 +120,7 @@ if tsunami_warnings:
     )
     bg_color = "crimson"
     border_color = "darkred"
-    y_pos = 1.12
+    y_pos = 0.95
 else:
     # No Tsunami Warning Styling (Blue)
     banner_text = (
@@ -129,23 +129,23 @@ else:
     )
     bg_color = "gray"
     border_color = "navy"
-    y_pos = 1.09
+    y_pos = 3.00
 
 # Example using fig.add_annotation in Plotly:
 fig.add_annotation(
     text=banner_text,
     xref="paper", yref="paper",
-    x=1.0, 
-    y=1.12,
-    xanchor="right",
-    yanchor="top",
+    x=0.5,              # Centers horizontally on the map
+    y=0.99,             # Keeps it tucked neatly near the top edge
+    xanchor="center",   # Anchors the middle of the box at x=0.5
+    yanchor="top",      # Grows downward from the top edge
+    align="center", 
     showarrow=False,
-    align="center",
     font=dict(size=12, color="white"),
     bgcolor=bg_color,
     bordercolor=border_color,
-    borderwidth=2,
-    borderpad=8
+    borderwidth=1,
+    borderpad=6
 )
 
 # 7. Add Attribution & Credits Text Box in the bottom-left corner
@@ -156,25 +156,67 @@ attribution_text = (
     "• Enhanced features, research, and error handling developed with assistance from Google."
 )
 
-fig.add_annotation(
-    text=attribution_text,
-    xref="paper", yref="paper",
-    x=0.0, y=-0.02,
-    xanchor="left",
-    yanchor="top",
-    showarrow=False,
-    align="left",
-    font=dict(size=11, color="#333333"),
-    bgcolor="rgba(245, 247, 250, 0.9)",
-    bordercolor="#cccccc",
-    borderwidth=1,
-    borderpad=8
+fig.update_layout(
+    autosize=True,
+    dragmode='pan',
+    # Since the tsunami warning moved to the top right, b=85 gives plenty of room for the colorbar + attribution
+    margin=dict(l=20, r=20, t=45, b=200), 
+    title=dict(font=dict(size=15), x=0.5, xanchor='center'),
+    coloraxis_colorbar=dict(
+        orientation="h",
+        yanchor="top",
+        y=-0.02,          # Sits right below the bottom edge of the map
+        xanchor="left",   # Left-aligns the colorbar so it lines up with the attribution below
+        x=0.01,
+        len=0.75,
+        thickness=12
+    )
 )
 
-# Ensure enough bottom and top margin so neither box gets cut off
-fig.update_layout(margin=dict(t=100, b=100))
+# Attribution text box tucked in the bottom left beneath the magnitude legend
+fig.add_annotation(
+    text=attribution_text,
+    xref="paper",
+    yref="paper",
+    x=0.01,             # Flush near the left margin
+    y=-0.18,            # Positioned cleanly underneath the horizontal colorbar
+    xanchor="left",     # Grows rightward from the left edge
+    yanchor="top",
+    align="left",
+    showarrow=False,
+    font=dict(size=10, color="#555555")
+)
+html_str = fig.to_html(
+    full_html=True,
+    include_plotlyjs=True,
+    config={'responsive': True, 'displayModeBar': False}
+)
+
+# Flexbox CSS centers the entire chart vertically and horizontally on the phone screen
+mobile_head = """<head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=no">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #ffffff;
+        }
+        .plotly-graph-div {
+            width: 100vw !important;
+            height: 88dvh !important;
+        }
+    </style>"""
+
+html_str = html_str.replace('<head>', mobile_head, 1)
+
+with open('index.html', 'w', encoding='utf-8') as f:
+    f.write(html_str)
 
 fig.show()
 
-from IPython.display import display, HTML
-display(HTML("<style>:root { --jp-notebook-max-width: 100% !important; }</style>"))
