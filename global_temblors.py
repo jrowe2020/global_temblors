@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 # Toggle to True to test the warning banner even when no tsunami == 1 exists in the data
 TEST_MODE = False
 
+
 # 1. Fetch live daily earthquake data from the USGS API.
 url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
 response = requests.get(url)
@@ -29,7 +30,7 @@ if TEST_MODE:
     },
     'geometry': {
         'coordinates': [-124.5, 45.5, 10.0]  # [lon, lat, depth]
-    }
+    },
     }
     all_eq_dicts.append(fake_eq)
 
@@ -52,7 +53,7 @@ for eq_dict in all_eq_dicts:
     tsunami = eq_dict['properties']['tsunami']
     timestamp_ms = eq_dict['properties']['time']
 
-        # 3. Skip entries with missing or negative magnitudes to prevent Plotly errors.
+# 3. Skip entries with missing or negative magnitudes to prevent Plotly errors.
     if mag is not None and mag > 0:
         mags.append(mag)
         sizes.append(mag ** 5)
@@ -70,12 +71,11 @@ for eq_dict in all_eq_dicts:
     if tsunami == 1:
         marker_colors.append('red')  # Distinct highlight color
         warning_text = f"{eq_title} <br>(Mag: {mag}, Lat: {lat}, Lon: {lon})"
+        Warning_link = f"https://www.tsunami.gov"
         tsunami_warnings.append(warning_text)
     else:
-        marker_colors.append(mag)    # Standard magnitude-based value
+        marker_colors.append('mag')    # Standard magnitude-based value
 
-# Determine if the warning banner should be displayed
-has_tsunami = (1 in tsunamis) 
 
 # 4. Build and display the interactive map.
 fig = px.scatter_map(
@@ -106,20 +106,45 @@ fig.update_traces(
     )
 )
 
+# 5. Add the Tsunami Warning Banner with clickable HTML link
+
+tsunami_url = "https://www.tsunami.gov/"
+link_html = f"<a href='{tsunami_url}' target='_blank' style='color: #ffe600;'>Official Tsunami Warning Center (Tsunami.gov)</a>"
+    
 if tsunami_warnings:
-    details = "<br>".join(tsunami_warnings)
-    banner_text = f"⚠️ TSUNAMI WARNING ACTIVE ⚠️<br>{details}"
+    # Active Tsunami Alert Styling (Red)
+    banner_text = (
+        "<b>TSUNAMI WARNING ACTIVE</b><br>"
+        + "<br>".join(tsunami_warnings)
+        + f"<br>More info: {link_html}"
+    )
+    bg_color = "crimson"
+    border_color = "darkred"
+    y_pos = 1.12
 else:
-    banner_text = "No Active Tsunami Warnings"
+    # No Tsunami Warning Styling (Blue)
+    banner_text = (
+        f"No active tsunami advisories noted:"
+        f" <br>{link_html}"
+    )
+    bg_color = "gray"
+    border_color = "navy"
+    y_pos = 1.09
 
 # Example using fig.add_annotation in Plotly:
 fig.add_annotation(
     text=banner_text,
     xref="paper", yref="paper",
-    x=0.5, y=0.98,
+    x=1.0, 
+    y=1.12,
+    xanchor="right",
+    yanchor="top",
     showarrow=False,
-    font=dict(size=14, color="white"),
-    bgcolor="crimson",
+    align="center",
+    font=dict(size=12, color="white"),
+    bgcolor=bg_color,
+    bordercolor=border_color,
+    borderwidth=2,
     borderpad=8
 )
 
