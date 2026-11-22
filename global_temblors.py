@@ -5,7 +5,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 # Toggle to True to test the warning banner even when no tsunami == 1 exists in the data
-TEST_MODE = False
+TEST_MODE = True
 
 
 # 1. Fetch live daily earthquake data from the USGS API.
@@ -136,9 +136,9 @@ else:
 # add instruction and attribution text
 instruction_text = (
     "<b>Navigation instructions:</b><br>"
-    "• Pinch, scroll, or double-click to zoom<br>"
-    "• Click and drag to pan<br>"
-    "• Hover over any cicle for earthquake details."
+    "• <b>Zoom:</b>  Pinch or double-click<br>"
+    "• <b>Pan:</b>  Drag with finger or cursor<br>"
+    "• <b>Get Earthquake Details:</b>  Tap or click any colored circle"
 )
 
 attribution_text = (
@@ -153,17 +153,17 @@ fig.update_layout(
     autosize=True,
     dragmode='pan',
     # Since the tsunami warning moved to the top right, b=85 gives plenty of room for the colorbar + attribution
-    margin=dict(l=20, r=20, t=45, b=65), 
+    margin=dict(l=12, r=12, t=48, b=170), 
     font=dict(family='-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'),
-    title=dict(font=dict(size=15), x=0.5, xanchor='center'),
+    title=dict(font=dict(size=16,color="#111111"), x=0.5, xanchor='center'),
     coloraxis_colorbar=dict(
         orientation="h",
         yanchor="top",
         y=-0.02,          # Sits right below the bottom edge of the map
         xanchor="left",   # Left-aligns the colorbar so it lines up with the attribution below
         x=0.01,
-        len=0.75,
-        thickness=12
+        len=0.8,
+        thickness=14
     )
 )
 
@@ -177,11 +177,11 @@ fig.add_annotation(
     yanchor="top",      # Grows downward from the top edge
     align="center", 
     showarrow=False,
-    font=dict(size=12, color="white"),
+    font=dict(size=13, color="white"),
     bgcolor=bg_color,
     bordercolor=border_color,
     borderwidth=1,
-    borderpad=6
+    borderpad=7
 )
 
 # Instruction text box in top left corner
@@ -190,16 +190,16 @@ fig.add_annotation(
     xref="paper",
     yref="paper",
     x=0.02,             # Flush near the left margin
-    y=0.8,             # Inside the bottom edge of the map canvas, above the colorbar
+    y=0.02,             # Inside the bottom edge of the map canvas, above the colorbar
     xanchor="left",     # Grows rightward from the left edge
     yanchor="bottom",   # Anchors from the bottom up so multi-line text never clips downward
     align="left",
     showarrow=False,
-    bgcolor="rgba(255, 255, 255, 0.85)", # Keeps text readable over map oceans/land
-    bordercolor="#cccccc",
+    bgcolor=bg_color,
+    bordercolor=border_color,
     borderwidth=1,
-    borderpad=5,
-    font=dict(size=9, color="#333333")
+    borderpad=7,
+    font=dict(size=12, color="#FFFFFF")
 )
 
 # Instructions/attribution text box tucked in the lower-left corner above the colorbar
@@ -208,16 +208,16 @@ fig.add_annotation(
     xref="paper",
     yref="paper",
     x=0.02,             # Flush near the left margin
-    y=0.02,             # Inside the bottom edge of the map canvas, above the colorbar
+    y=-0.27,             # Inside the bottom edge of the map canvas, above the colorbar
     xanchor="left",     # Grows rightward from the left edge
     yanchor="bottom",   # Anchors from the bottom up so multi-line text never clips downward
     align="left",
     showarrow=False,
-    bgcolor="rgba(255, 255, 255, 0.85)", # Keeps text readable over map oceans/land
+    bgcolor="rgba(248, 249, 250, 0.95)",
     bordercolor="#cccccc",
     borderwidth=1,
-    borderpad=5,
-    font=dict(size=9, color="#333333")
+    borderpad=7,
+    font=dict(size=11, color="#222222")
 )
 
 # Export HTML with native 1.0 viewport scaling for crisp mobile rendering
