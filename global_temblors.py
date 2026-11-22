@@ -179,7 +179,7 @@ fig.add_annotation(
     xref="paper",
     yref="paper",
     x=0.01,             # Flush near the left margin
-    y=-0.18,            # Positioned cleanly underneath the horizontal colorbar
+    y=-0.12,            # Positioned cleanly underneath the horizontal colorbar
     xanchor="left",     # Grows rightward from the left edge
     yanchor="top",
     align="left",
@@ -191,6 +191,68 @@ html_str = fig.to_html(
     include_plotlyjs=True,
     config={'responsive': True, 'displayModeBar': False}
 )
+
+###################
+
+# 7. Add Attribution & Credits Text Box in the bottom-left corner
+instruction_text = (
+    "<b>Navigation instructions:</b><br>"
+    "• Pinch, scroll, or double-click to zoom<br>"
+    "• Click and drag to pan<br>"
+    "• Hover over any cicle for earthquake details."
+)
+
+fig.update_layout(
+    autosize=True,
+    dragmode='pan',
+    # Since the tsunami warning moved to the top right, b=85 gives plenty of room for the colorbar + attribution
+    margin=dict(l=20, r=20, t=45, b=150), 
+    title=dict(font=dict(size=15), x=0.5, xanchor='center'),
+    coloraxis_colorbar=dict(
+        orientation="h",
+        yanchor="top",
+        y=-0.01,          # Sits right below the bottom edge of the map
+        xanchor="left",   # Left-aligns the colorbar so it lines up with the attribution below
+        x=0.01,
+        len=0.75,
+        thickness=12
+    )
+)
+
+# Instructions/attribution text box tucked in the lower-left corner above the colorbar
+fig.add_annotation(
+    text=instruction_text,
+    xref="paper",
+    yref="paper",
+    x=0.02,             # Flush near the left margin
+    y=0.02,             # Inside the bottom edge of the map canvas, above the colorbar
+    xanchor="left",     # Grows rightward from the left edge
+    yanchor="bottom",   # Anchors from the bottom up so multi-line text never clips downward
+    align="left",
+    showarrow=False,
+    bgcolor="rgba(255, 255, 255, 0.85)", # Keeps text readable over map oceans/land
+    bordercolor="#cccccc",
+    borderwidth=1,
+    borderpad=4,
+    font=dict(size=10, color="#333333")
+)
+
+fig.add_annotation(
+    text=banner_text,
+    xref="paper", yref="paper",
+    x=0.5,              # Centers horizontally on the map
+    y=0.99,             # Keeps it tucked neatly near the top edge
+    xanchor="center",   # Anchors the middle of the box at x=0.5
+    yanchor="top",      # Grows downward from the top edge
+    align="center", 
+    showarrow=False,
+    font=dict(size=12, color="white"),
+    bgcolor=bg_color,
+    bordercolor=border_color,
+    borderwidth=1,
+    borderpad=6
+)
+#################
 
 # Flexbox CSS centers the entire chart vertically and horizontally on the phone screen
 mobile_head = """<head>
@@ -212,6 +274,8 @@ mobile_head = """<head>
             height: 88dvh !important;
         }
     </style>"""
+
+
 
 html_str = html_str.replace('<head>', mobile_head, 1)
 
