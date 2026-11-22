@@ -131,6 +131,42 @@ else:
     border_color = "navy"
     y_pos = 3.00
 
+
+
+# add instruction and attribution text
+instruction_text = (
+    "<b>Navigation instructions:</b><br>"
+    "• Pinch, scroll, or double-click to zoom<br>"
+    "• Click and drag to pan<br>"
+    "• Hover over any cicle for earthquake details."
+)
+
+attribution_text = (
+    "<b>Project Credits & Data Sources:</b><br>"
+    "• Base code adapted from the <i>Python Crash Course</i> earthquake visualization exercise.<br>"
+    "• Seismic event data provided by the U.S. Geological Survey (USGS).<br>"
+    "• Enhanced features, research, and error handling developed with assistance from Google."
+)
+
+# Update layout
+fig.update_layout(
+    autosize=True,
+    dragmode='pan',
+    # Since the tsunami warning moved to the top right, b=85 gives plenty of room for the colorbar + attribution
+    margin=dict(l=20, r=20, t=45, b=65), 
+    font=dict(family='-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'),
+    title=dict(font=dict(size=15), x=0.5, xanchor='center'),
+    coloraxis_colorbar=dict(
+        orientation="h",
+        yanchor="top",
+        y=-0.02,          # Sits right below the bottom edge of the map
+        xanchor="left",   # Left-aligns the colorbar so it lines up with the attribution below
+        x=0.01,
+        len=0.75,
+        thickness=12
+    )
+)
+
 # Example using fig.add_annotation in Plotly:
 fig.add_annotation(
     text=banner_text,
@@ -148,80 +184,27 @@ fig.add_annotation(
     borderpad=6
 )
 
-# 7. Add Attribution & Credits Text Box in the bottom-left corner
-attribution_text = (
-    "<b>Project Credits & Data Sources:</b><br>"
-    "• Base code adapted from the <i>Python Crash Course</i> earthquake visualization exercise.<br>"
-    "• Seismic event data provided by the U.S. Geological Survey (USGS).<br>"
-    "• Enhanced features, research, and error handling developed with assistance from Google."
-)
-
-fig.update_layout(
-    autosize=True,
-    dragmode='pan',
-    # Since the tsunami warning moved to the top right, b=85 gives plenty of room for the colorbar + attribution
-    margin=dict(l=20, r=20, t=45, b=200), 
-    title=dict(font=dict(size=15), x=0.5, xanchor='center'),
-    coloraxis_colorbar=dict(
-        orientation="h",
-        yanchor="top",
-        y=-0.02,          # Sits right below the bottom edge of the map
-        xanchor="left",   # Left-aligns the colorbar so it lines up with the attribution below
-        x=0.01,
-        len=0.75,
-        thickness=12
-    )
-)
-
-# Attribution text box tucked in the bottom left beneath the magnitude legend
+# Instruction text box in top left corner
 fig.add_annotation(
-    text=attribution_text,
+    text=instruction_text,
     xref="paper",
     yref="paper",
-    x=0.01,             # Flush near the left margin
-    y=-0.12,            # Positioned cleanly underneath the horizontal colorbar
+    x=0.02,             # Flush near the left margin
+    y=0.8,             # Inside the bottom edge of the map canvas, above the colorbar
     xanchor="left",     # Grows rightward from the left edge
-    yanchor="top",
+    yanchor="bottom",   # Anchors from the bottom up so multi-line text never clips downward
     align="left",
     showarrow=False,
-    font=dict(size=10, color="#555555")
-)
-html_str = fig.to_html(
-    full_html=True,
-    include_plotlyjs=True,
-    config={'responsive': True, 'displayModeBar': False}
-)
-
-###################
-
-# 7. Add Attribution & Credits Text Box in the bottom-left corner
-instruction_text = (
-    "<b>Navigation instructions:</b><br>"
-    "• Pinch, scroll, or double-click to zoom<br>"
-    "• Click and drag to pan<br>"
-    "• Hover over any cicle for earthquake details."
-)
-
-fig.update_layout(
-    autosize=True,
-    dragmode='pan',
-    # Since the tsunami warning moved to the top right, b=85 gives plenty of room for the colorbar + attribution
-    margin=dict(l=20, r=20, t=45, b=150), 
-    title=dict(font=dict(size=15), x=0.5, xanchor='center'),
-    coloraxis_colorbar=dict(
-        orientation="h",
-        yanchor="top",
-        y=-0.01,          # Sits right below the bottom edge of the map
-        xanchor="left",   # Left-aligns the colorbar so it lines up with the attribution below
-        x=0.01,
-        len=0.75,
-        thickness=12
-    )
+    bgcolor="rgba(255, 255, 255, 0.85)", # Keeps text readable over map oceans/land
+    bordercolor="#cccccc",
+    borderwidth=1,
+    borderpad=5,
+    font=dict(size=9, color="#333333")
 )
 
 # Instructions/attribution text box tucked in the lower-left corner above the colorbar
 fig.add_annotation(
-    text=instruction_text,
+    text=attribution_text,
     xref="paper",
     yref="paper",
     x=0.02,             # Flush near the left margin
@@ -233,28 +216,17 @@ fig.add_annotation(
     bgcolor="rgba(255, 255, 255, 0.85)", # Keeps text readable over map oceans/land
     bordercolor="#cccccc",
     borderwidth=1,
-    borderpad=4,
-    font=dict(size=10, color="#333333")
+    borderpad=5,
+    font=dict(size=9, color="#333333")
 )
 
-fig.add_annotation(
-    text=banner_text,
-    xref="paper", yref="paper",
-    x=0.5,              # Centers horizontally on the map
-    y=0.99,             # Keeps it tucked neatly near the top edge
-    xanchor="center",   # Anchors the middle of the box at x=0.5
-    yanchor="top",      # Grows downward from the top edge
-    align="center", 
-    showarrow=False,
-    font=dict(size=12, color="white"),
-    bgcolor=bg_color,
-    bordercolor=border_color,
-    borderwidth=1,
-    borderpad=6
+# Export HTML with native 1.0 viewport scaling for crisp mobile rendering
+html_str = fig.to_html(
+    full_html=True,
+    include_plotlyjs=True,
+    config={'responsive': True, 'displayModeBar': False}
 )
-#################
 
-# Flexbox CSS centers the entire chart vertically and horizontally on the phone screen
 mobile_head = """<head>
     <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=1.0, user-scalable=no">
     <style>
@@ -271,7 +243,7 @@ mobile_head = """<head>
         }
         .plotly-graph-div {
             width: 100vw !important;
-            height: 88dvh !important;
+            height: 92dvh !important;
         }
     </style>"""
 
