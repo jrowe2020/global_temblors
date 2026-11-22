@@ -5,7 +5,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 # Toggle to True to test the warning banner even when no tsunami == 1 exists in the data
-TEST_MODE = True
+TEST_MODE = False
 
 
 # 1. Fetch live daily earthquake data from the USGS API.
@@ -138,7 +138,7 @@ instruction_text = (
     "<b>Navigation instructions:</b><br>"
     "• <b>Zoom:</b>  Pinch or double-click<br>"
     "• <b>Pan:</b>  Drag with finger or cursor<br>"
-    "• <b>Get Earthquake Details:</b>  Tap or click any colored circle"
+    "• <b>Get Earthquake Details:</b>  Tap or click on any colored circle"
 )
 
 attribution_text = (
@@ -195,8 +195,8 @@ fig.add_annotation(
     yanchor="bottom",   # Anchors from the bottom up so multi-line text never clips downward
     align="left",
     showarrow=False,
-    bgcolor=bg_color,
-    bordercolor=border_color,
+    bgcolor="gray",
+    bordercolor="#cccccc",
     borderwidth=1,
     borderpad=7,
     font=dict(size=12, color="#FFFFFF")
