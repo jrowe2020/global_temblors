@@ -7,7 +7,6 @@ from zoneinfo import ZoneInfo
 # Toggle to True to test the warning banner even when no tsunami == 1 exists in the data
 TEST_MODE = False
 
-
 # 1. Fetch live daily earthquake data from the USGS API.
 url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
 response = requests.get(url)
@@ -131,7 +130,15 @@ else:
     border_color = "navy"
     y_pos = 3.00
 
+# Title details
+title = all_eq_data['metadata']['title']
+usgs_url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php"
 
+formatted_title = (
+    "<span style='font-size:18px; font-weight:bold; color:#222222;'>The Tabor Semi-Tropic Observer: Temblor Map</span><br>"
+    f"<span style='font-size:14px; font-weight:bold; '><a href='{usgs_url}' color:#555555;'>{title}</span><br>"
+    "<span style='font-size:14px; font-weight:bold; color:#FF0000;'>For Entertainment Purposes Only -  Not for Emergency or Life-Safety Use</span>"
+)
 
 # add instruction and attribution text
 instruction_text = (
@@ -143,8 +150,10 @@ instruction_text = (
 
 attribution_text = (
     "<b>Project Credits & Data Sources:</b><br>"
-    "• Base code adapted from the <i>Python Crash Course</i> earthquake visualization exercise.<br>"
-    "• Seismic event data provided by the U.S. Geological Survey (USGS).<br>"
+    "• Base code from Eric Matthes, <i>Python Crash Course: A Hands-On, Project-Based Introduction to Programming,<br></i> 2nd ed. (San Francisco: No Starch Press, 2019),347.<br>"
+    "• Seismic event data provided by the "
+    "<a href='https://www.usgs.gov/programs/earthquake-hazards' target='_blank'>"
+        "USGS Earthquake Hazards Program</a>.<br>"
     "• Enhanced features, research, and error handling developed with assistance from Google."
 )
 
@@ -153,9 +162,16 @@ fig.update_layout(
     autosize=True,
     dragmode='pan',
     # Since the tsunami warning moved to the top right, b=85 gives plenty of room for the colorbar + attribution
-    margin=dict(l=12, r=12, t=48, b=170), 
+    margin=dict(l=8, r=8, t=78, b=170), 
     font=dict(family='-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'),
-    title=dict(font=dict(size=16,color="#111111"), x=0.5, xanchor='center'),
+    title=dict(
+        text=formatted_title,
+        font=dict(family='-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'),
+        x=0.5, 
+        y=0.98,
+        xanchor='center',
+        yanchor='top'
+        ),
     coloraxis_colorbar=dict(
         orientation="h",
         yanchor="top",
@@ -163,7 +179,7 @@ fig.update_layout(
         xanchor="left",   # Left-aligns the colorbar so it lines up with the attribution below
         x=0.01,
         len=0.8,
-        thickness=14
+        thickness=14,
     )
 )
 
@@ -208,7 +224,7 @@ fig.add_annotation(
     xref="paper",
     yref="paper",
     x=0.02,             # Flush near the left margin
-    y=-0.27,             # Inside the bottom edge of the map canvas, above the colorbar
+    y=-0.32,             # Inside the bottom edge of the map canvas, above the colorbar
     xanchor="left",     # Grows rightward from the left edge
     yanchor="bottom",   # Anchors from the bottom up so multi-line text never clips downward
     align="left",
