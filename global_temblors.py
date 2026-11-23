@@ -150,7 +150,7 @@ instruction_text = (
 
 attribution_text = (
     "<b>Project Credits & Data Sources:</b><br>"
-    "• Base code from Eric Matthes, <i>Python Crash Course: A Hands-On, Project-Based Introduction to Programming,<br></i> 2nd ed. (San Francisco: No Starch Press, 2019),347.<br>"
+    "• Base code from Eric Matthes, <i>Python Crash Course: A Hands-On, Project-Based Introduction <br>to Programming,</i> 2nd ed. (San Francisco: No Starch Press, 2019),347.<br>"
     "• Seismic event data provided by the "
     "<a href='https://www.usgs.gov/programs/earthquake-hazards' target='_blank'>"
         "USGS Earthquake Hazards Program</a>.<br>"
