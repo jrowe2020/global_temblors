@@ -5,7 +5,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 # Toggle to True to test the warning banner even when no tsunami == 1 exists in the data
-TEST_MODE = False
+TEST_MODE = True
 
 # 1. Fetch live daily earthquake data from the USGS API.
 url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
@@ -162,7 +162,7 @@ fig.update_layout(
     autosize=True,
     dragmode='pan',
     # Since the tsunami warning moved to the top right, b=85 gives plenty of room for the colorbar + attribution
-    margin=dict(l=8, r=8, t=78, b=170), 
+    margin=dict(l=8, r=8, t=75, b=180), 
     font=dict(family='-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'),
     title=dict(
         text=formatted_title,
