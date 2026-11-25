@@ -1,0 +1,35 @@
+name: Update Earthquake Map
+
+on:
+  schedule:
+    - cron: '0 0,12 * * *'  # Runs at 00:00 and 12:00 UTC (twice a day)
+  workflow_dispatch:         # Allows you to trigger updates manually
+
+permissions:
+  contents: write         # Lets the bot commit the new index.html
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Python script
+        run: python build_map.py
+
+      - name: Commit updated map
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add index.html
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update USGS earthquake data"
+          git push
