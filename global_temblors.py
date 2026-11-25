@@ -145,7 +145,7 @@ instruction_text = (
     "<b>Navigation instructions:</b><br>"
     "• <b>Zoom:</b>  Pinch or double-click<br>"
     "• <b>Pan:</b>  Drag with finger or cursor<br>"
-    "• <b>Get Earthquake Details:</b>  Tap or click on any colored circle"
+    "• <b>Get Earthquake Details and Tsunami Warning Status:</b>  Tap or click any colored circle<br>"
 )
 
 attribution_text = (
