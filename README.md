@@ -1,6 +1,7 @@
 # global_temblors
 
 Global_temblors is an earthquake map based on an exercise found in "Python Crash Course" by Eric Matthes and earthquake data from the U.S. Geological Survey. The map uses Python3 and Plotly to display the name, magnitude, time (Pacific LA), location, depth, and tsunami status of earthquakes occuring over the past day. <br>
+<br>
 <b>Project Credits & Data Sources:</b><br>
     - Base code from Eric Matthes, <i>Python Crash Course: A Hands-On, Project-Based Introduction <br>to Programming,</i> 2nd ed. (San Francisco: No Starch Press, 2019),347.<br>
     - Seismic event data provided by the 
