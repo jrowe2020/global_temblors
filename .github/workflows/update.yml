@@ -3,20 +3,20 @@ name: Update Earthquake Map
 on:
   schedule:
     - cron: '0 0,12 * * *'  # Runs at 00:00 and 12:00 UTC (twice a day)
-  workflow_dispatch:         # Allows you to trigger updates manually
+  workflow_dispatch:        # Allows you to trigger updates manually
 
 permissions:
-  contents: write         # Lets the bot commit the new index.html
+  contents: write           # Lets the bot commit the new index.html
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
 
